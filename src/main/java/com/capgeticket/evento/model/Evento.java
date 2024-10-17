@@ -7,7 +7,7 @@ import java.time.LocalDate;
 
 @Data
 @Entity
-@Table(name = "Evento")
+@Table(name = "evento")
 public class Evento {
 
     @Id
@@ -20,19 +20,19 @@ public class Evento {
     @Column(name = "descripcion", nullable = false, length = 255)
     private String descripcion;
 
-    @Column(name = "fechaEvento", nullable = false)
+    @Column(name = "fechaevento", nullable = false)
     private LocalDate fechaEvento;
 
-    @Column(name = "precioMinimo", nullable = false, precision = 10, scale = 2)
+    @Column(name = "preciominimo", nullable = false, precision = 10, scale = 2)
     private BigDecimal precioMinimo;
 
-    @Column(name = "precioMaximo", nullable = false, precision = 10, scale = 2)
+    @Column(name = "preciomaximo", nullable = false, precision = 10, scale = 2)
     private BigDecimal precioMaximo;
 
     @Column(name = "localidad", nullable = false, length = 255)
     private String localidad;
 
-    @Column(name = "nombreDelRecinto", nullable = false, length = 255)
+    @Column(name = "nombredelrecinto", nullable = false, length = 255)
     private String nombreDelRecinto;
 
     @Column(name = "genero", nullable = false, length = 255)
