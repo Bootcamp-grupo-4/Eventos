@@ -100,7 +100,7 @@ public class AddEvento01 {
         when(eventoService.add(any(EventoDto.class))).thenReturn(eventoDto);
 
         // When
-        mockMvc.perform(post("/evento/")
+        mockMvc.perform(post("/evento")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\n" +
                                 "    \"nombre\": \"Concierto\",\n" +
@@ -124,7 +124,7 @@ public class AddEvento01 {
 
     @Test
     void testAddNullEventoController() throws Exception {
-        mockMvc.perform(post("/evento/")
+        mockMvc.perform(post("/evento")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("")) // Cuerpo vacío (evento nulo)
                 .andExpect(status().isBadRequest());
@@ -136,7 +136,7 @@ public class AddEvento01 {
     @Test
     void testAddEventoWithInvalidDataController() throws Exception {
         // Act & Assert
-        mockMvc.perform(post("/evento/")
+        mockMvc.perform(post("/evento")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\n" +
                                 "    \"nombre\": \"\",\n" +  // Nombre vacío
@@ -155,7 +155,7 @@ public class AddEvento01 {
                 .andExpect(jsonPath("$.status").value(400)) // Verificamos el status 400
                 .andExpect(jsonPath("$.error").value("Solicitud incorrecta"))
                 .andExpect(jsonPath("$.message").value("El evento no puede ser nulo o tener un nombre vacío"))
-                .andExpect(jsonPath("$.path").value("uri=/evento/"));
+                .andExpect(jsonPath("$.path").value("uri=/evento"));
 
         verify(eventoService, never()).add(any(EventoDto.class)); // Asegura que el método del servicio no fue llamado
     }

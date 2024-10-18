@@ -13,7 +13,8 @@ public class OpenApiConfig {
     @Bean
     public OpenAPI openAPI() {
         return new OpenAPI()
-                .info(new Info().title("Eventos API")
+                .info(new Info()
+                        .title("Eventos API")
                         .description("Documentación Eventos API")
                         .version("v1.0")
                         .license(new License().name("LICENSE").url("http://springdoc.org")))

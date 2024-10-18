@@ -4,12 +4,10 @@ import com.capgeticket.evento.dto.EventoDto;
 import com.capgeticket.evento.exception.EventoNotFoundException;
 import com.capgeticket.evento.service.EventoService;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.websocket.server.PathParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -58,7 +56,7 @@ public class EventoController {
      * @return El ResponseEntity con el evento guardado y el estado HTTP 201.
      * @throws IllegalArgumentException Si el eventoDto es nulo o inválido.
      */
-    @PostMapping("/")
+    @PostMapping
     public ResponseEntity<EventoDto> add(@RequestBody EventoDto eventoDto) {
         if (eventoDto == null || eventoDto.getNombre() == null || eventoDto.getNombre().isEmpty()) {
             throw new IllegalArgumentException("El evento no puede ser nulo o tener un nombre vacío");
