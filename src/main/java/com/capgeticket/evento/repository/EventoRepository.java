@@ -15,5 +15,11 @@ public interface EventoRepository extends JpaRepository<Evento,Long> {
      * @return Lista de eventos que coinciden con el criterio de búsqueda.
      */
     List<Evento> findByNombreContainingIgnoreCase(String nombre);
-
+    /**
+     * Busca eventos cuyo género contenga el texto especificado
+     *
+     * @param genero El género a buscar en los eventos.
+     * @return Lista de eventos que coinciden con el criterio de búsqueda.
+     */
+    List<Evento> findByGenero(String genero);
 }
