@@ -128,7 +128,7 @@ public class EventoServiceImpl implements EventoService{
         List<Evento> eventos = repository.findByNombreContainingIgnoreCase(name);
 
         if (eventos.isEmpty()) {
-            throw new EventoNotFoundException();
+            throw new EventoNotFoundException("No existen eventos con ese nombre");
         }
 
         return EventoDto.of(eventos);
