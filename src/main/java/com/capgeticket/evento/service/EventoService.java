@@ -10,4 +10,6 @@ public interface EventoService {
     List<EventoDto> findAll();
 
     EventoDto findById(Long id);
+
+    EventoDto add(EventoDto evento);
 }
