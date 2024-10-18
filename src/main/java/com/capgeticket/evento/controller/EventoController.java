@@ -85,6 +85,7 @@ public class EventoController {
         return new ResponseEntity<>(isDeleted, HttpStatus.OK);
     }
 
+
     /**
      * Maneja las solicitudes GET para buscar eventos por nombre.
      *
