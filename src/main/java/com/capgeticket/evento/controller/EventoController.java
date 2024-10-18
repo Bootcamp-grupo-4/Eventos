@@ -115,5 +115,13 @@ public class EventoController {
         List<EventoDto> eventos = service.findByName(name);
         return ResponseEntity.ok(eventos);
     }
+
+    public ResponseEntity<EventoDto> edit(@RequestBody EventoDto eventoDto) {
+        if (eventoDto == null || eventoDto.getNombre() == null || eventoDto.getNombre().isEmpty()) {
+
+        }
+
+
+    }
 }
 
