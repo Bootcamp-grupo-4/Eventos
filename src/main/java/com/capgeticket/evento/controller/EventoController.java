@@ -1,6 +1,7 @@
 package com.capgeticket.evento.controller;
 
 import com.capgeticket.evento.dto.EventoDto;
+import com.capgeticket.evento.exception.EventoNotFoundException;
 import com.capgeticket.evento.service.EventoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,21 +56,23 @@ public class EventoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedEvento);
     }
 
+    /**
+     * Maneja las solicitudes GET para buscar eventos por nombre.
+     *
+     * @param name el nombre del evento a buscar; no puede ser nulo o vacío
+     * @return una respuesta HTTP que contiene una colección de {@link EventoDto} encontrados
+     * @throws IllegalArgumentException si el nombre del evento es nulo o vacío
+     * @throws EventoNotFoundException en service si no se encuentran eventos que coincidan con el nombre proporcionado
+     */
     @GetMapping("/nombre")
     public ResponseEntity<Collection<EventoDto>> findByName(@RequestParam String name) {
+        // Validar nombre
+        if (name == null || name.trim().isEmpty()) {
+            throw new IllegalArgumentException("El nombre del evento no puede ser nulo o vacío");
+        }
+
         List<EventoDto> eventos = service.findByName(name);
         return ResponseEntity.ok(eventos);
-    }
-
-    /**
-     * Manejador de excepciones para IllegalArgumentException.
-     *
-     * @param ex La excepción capturada.
-     * @return Un ResponseEntity con el mensaje de error y un estado HTTP 400.
-     */
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException ex) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
 }
 

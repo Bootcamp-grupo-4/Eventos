@@ -63,11 +63,16 @@ public class EventoServiceImpl implements EventoService{
         return EventoDto.of(savedEvento);
     }
 
+    /**
+     * Busca eventos por nombre, ignorando mayúsculas y minúsculas.
+     *
+     * @param name el nombre del evento a buscar; no puede ser nulo o vacío
+     * @return una lista de {@link EventoDto} que coinciden con el nombre proporcionado
+     * @throws EventoNotFoundException si no se encuentran eventos que coincidan con el nombre proporcionado
+     */
     @Override
     public List<EventoDto> findByName(String name) {
-        if (name == null || name.trim().isEmpty()) {
-            throw new IllegalArgumentException("El nombre del evento no puede ser nulo o vacío");
-        }
+        logger.info(name);
 
         List<Evento> eventos = repository.findByNombreContainingIgnoreCase(name);
 
