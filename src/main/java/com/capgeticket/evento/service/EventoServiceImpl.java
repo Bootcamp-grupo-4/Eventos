@@ -11,10 +11,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class EventoServiceImpl implements EventoService{
+
     private static final Logger logger = LoggerFactory.getLogger(EventoServiceImpl.class);
 
     @Autowired
@@ -94,6 +96,24 @@ public class EventoServiceImpl implements EventoService{
             return false;
         }
 
+    }
+
+    /**
+     * Obtiene un evento determinado por su id
+     *
+     * @param id la id del evento que se quiere buscar
+     * @return un objeto EventoDto con los datos del evento
+     */
+    @Override
+    public EventoDto findById(Long id) {
+        logger.info("Iniciando la busqueda de el evento con id = " + id);
+
+        EventoDto event = null;
+        //Se puede hacer un metodo nuevo que sea findById que acepte long
+        Optional<Evento> e = repository.findById(id);
+        logger.info("Evento encontrado: {}", e.isPresent());
+
+        return EventoDto.of(e.orElseThrow(() -> new EventoNotFoundException(id)));
     }
 
     /**
