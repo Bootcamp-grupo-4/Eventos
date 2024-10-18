@@ -83,6 +83,7 @@ public class EventoController {
         // Devolver respuesta con estado OK y el resultado de la eliminación
         return new ResponseEntity<>(isDeleted, HttpStatus.OK);
     }
+
 }
 
 
