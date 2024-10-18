@@ -24,4 +24,12 @@ public interface EventoRepository extends JpaRepository<Evento,Long> {
      */
     @Query("SELECT e FROM Evento e WHERE e.localidad = :localidad")
     List<Evento> findByCity(String localidad);
+
+    /**
+     * Busca eventos cuyo género contenga el texto especificado
+     *
+     * @param genero El género a buscar en los eventos.
+     * @return Lista de eventos que coinciden con el criterio de búsqueda.
+     */
+    List<Evento> findByGenero(String genero);
 }

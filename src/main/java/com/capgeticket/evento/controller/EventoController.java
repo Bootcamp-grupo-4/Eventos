@@ -144,6 +144,20 @@ public class EventoController {
         logger.info("Se han encontrado {} eventos en la ciudad: {}", eventos.size(), city);
         return new ResponseEntity<>(eventos, HttpStatus.OK);
     }
-}
 
+    /**
+     * Maneja las solicitudes GET para buscar eventos por género.
+     *
+     * @param genre el género de los eventos a buscar. No debe ser nulo o vacío.
+     * @return una respuesta {@link ResponseEntity} con una colección de {@link EventoDto} encontrados.
+     * @throws IllegalArgumentException si el género es nulo o vacío.
+     */
+    @GetMapping("/genero")
+    public ResponseEntity<Collection<EventoDto>> findByGenre(@RequestParam String genre) {
+        logger.info("Buscando eventos por género: {}", genre);
+
+        List<EventoDto> eventos = service.findByGenre(genre);
+        return ResponseEntity.ok(eventos);
+    }
+}
 
