@@ -2,6 +2,8 @@ package com.capgeticket.evento.controller;
 
 import com.capgeticket.evento.dto.EventoDto;
 import com.capgeticket.evento.service.EventoService;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.websocket.server.PathParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,7 @@ import java.util.Collection;
 
 @RestController
 @RequestMapping("/evento")
+@Tag(name="Evento", description = "Api evento")
 public class EventoController {
     private static final Logger logger = LoggerFactory.getLogger(EventoController.class);
 
@@ -38,6 +41,15 @@ public class EventoController {
         logger.info("Eventos encontrados: {}", eventos.size());
 
         return ResponseEntity.ok(eventos);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<EventoDto> findById(@PathVariable("id") Long id) {
+        logger.info("Recibida petición, iniciando findById");
+
+        EventoDto e = service.findById(id);
+
+        return ResponseEntity.ok(e);
     }
 
     /**
@@ -65,18 +77,6 @@ public class EventoController {
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
-    }
-
-    @Operation
-    @GetMapping("/{id}")
-    public ResponseEntity<EventoDto> findById(@RequestParam @Validated Long id) {
-        logger.info("Recibida petición, iniciando findById");
-
-        EventoDto e = service.findById(id);
-
-
-
-        return ResponseEntity.ok(e);
     }
 }
 
