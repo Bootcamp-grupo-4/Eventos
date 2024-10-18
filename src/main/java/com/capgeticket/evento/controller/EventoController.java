@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
+import java.util.List;
 
 @RestController
 @RequestMapping("/evento")
@@ -84,9 +85,24 @@ public class EventoController {
         return new ResponseEntity<>(isDeleted, HttpStatus.OK);
     }
 
+
+    /**
+     * Maneja las solicitudes GET para buscar eventos por nombre.
+     *
+     * @param name el nombre del evento a buscar; no puede ser nulo o vacío
+     * @return una respuesta HTTP que contiene una colección de {@link EventoDto} encontrados
+     * @throws IllegalArgumentException si el nombre del evento es nulo o vacío
+     * @throws EventoNotFoundException en service si no se encuentran eventos que coincidan con el nombre proporcionado
+     */
+    @GetMapping("/nombre")
+    public ResponseEntity<Collection<EventoDto>> findByName(@RequestParam String name) {
+        // Validar nombre
+        if (name == null || name.trim().isEmpty()) {
+            throw new IllegalArgumentException("El nombre del evento no puede ser nulo o vacío");
+        }
+
+        List<EventoDto> eventos = service.findByName(name);
+        return ResponseEntity.ok(eventos);
+    }
 }
-
-
-
-
 

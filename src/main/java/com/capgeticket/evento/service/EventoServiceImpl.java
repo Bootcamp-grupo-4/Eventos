@@ -1,6 +1,7 @@
 package com.capgeticket.evento.service;
 
 import com.capgeticket.evento.dto.EventoDto;
+import com.capgeticket.evento.exception.EventoNotFoundException;
 import com.capgeticket.evento.model.Evento;
 import com.capgeticket.evento.repository.EventoRepository;
 import org.slf4j.Logger;
@@ -92,4 +93,25 @@ public class EventoServiceImpl implements EventoService{
         }
 
     }
+
+    /**
+     * Busca eventos por nombre, ignorando mayúsculas y minúsculas.
+     *
+     * @param name el nombre del evento a buscar; no puede ser nulo o vacío
+     * @return una lista de {@link EventoDto} que coinciden con el nombre proporcionado
+     * @throws EventoNotFoundException si no se encuentran eventos que coincidan con el nombre proporcionado
+     */
+    @Override
+    public List<EventoDto> findByName(String name) {
+        logger.info(name);
+
+        List<Evento> eventos = repository.findByNombreContainingIgnoreCase(name);
+
+        if (eventos.isEmpty()) {
+            throw new EventoNotFoundException();
+        }
+
+        return EventoDto.of(eventos);
+    }
+
 }
