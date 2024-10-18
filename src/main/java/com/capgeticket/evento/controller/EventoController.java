@@ -104,5 +104,37 @@ public class EventoController {
         List<EventoDto> eventos = service.findByName(name);
         return ResponseEntity.ok(eventos);
     }
+
+    /**
+     * Obtiene una lista de eventos según la ciudad introducida.
+     *
+     * @param city La ciudad por la que se desea filtrar los eventos.
+     * @return ResponseEntity con una colección de eventos filtrados por ciudad.
+     * @throws IllegalArgumentException Si la ciudad es nula o vacía.
+     * @throws EventoNotFoundException Si no se encuentran eventos en la ciudad.
+     */
+    @GetMapping("/city")
+    public ResponseEntity<Collection<EventoDto>> findByCity(@RequestParam(value = "city") String city) {
+        logger.info("Petición para obtener eventos en la ciudad: {}", city);
+
+        // Validar si la ciudad es null o vacía y lanzar IllegalArgumentException
+        if (city == null || city.trim().isEmpty()) {
+            logger.error("La ciudad proporcionada es nula o vacía. Lanzando IllegalArgumentException.");
+            throw new IllegalArgumentException("La ciudad no puede ser nula o vacía.");
+        }
+
+        // Llamada al servicio para obtener los eventos
+        Collection<EventoDto> eventos = service.findByCity(city);
+
+        // Verificar si la lista de eventos está vacía y lanzar EventoNotFoundException
+        if (eventos.isEmpty()) {
+            logger.error("No se encontraron eventos en la ciudad: {}. Lanzando EventoNotFoundException.", city);
+            throw new EventoNotFoundException("No se encontraron eventos en la ciudad " + city);
+        }
+
+        logger.info("Se han encontrado {} eventos en la ciudad: {}", eventos.size(), city);
+        return new ResponseEntity<>(eventos, HttpStatus.OK);
+    }
 }
+
 

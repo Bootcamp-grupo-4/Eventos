@@ -9,7 +9,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class EventoServiceImpl implements EventoService{
@@ -112,6 +114,27 @@ public class EventoServiceImpl implements EventoService{
         }
 
         return EventoDto.of(eventos);
+    }
+
+    /**
+     * Obtiene una lista de eventos según la ciudad proporcionada.
+     *
+     * @param city La ciudad por la que se desea filtrar los eventos.
+     * @return Una lista de eventos en formato DTO.
+     * @throws EventoNotFoundException Si no se encuentran eventos en la ciudad.
+     */
+    @Override
+    public List<EventoDto> findByCity(String city) {
+        logger.info("Buscando eventos en la ciudad: {} en EventoServiceImpl", city);
+
+        List<Evento> eventos = repository.findByCity(city);
+
+        if (eventos.isEmpty()) {
+            logger.error("No se encontraron eventos en la ciudad: {}. Lanzando EventoNotFoundException.", city);
+            throw new EventoNotFoundException("No se encontraron eventos en la ciudad en EventoServiceImpl" + city);
+        }
+
+        return eventos.stream().map(EventoDto::of).collect(Collectors.toList());
     }
 
 }
