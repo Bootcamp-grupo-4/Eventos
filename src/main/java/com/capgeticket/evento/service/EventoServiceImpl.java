@@ -1,6 +1,7 @@
 package com.capgeticket.evento.service;
 
 import com.capgeticket.evento.dto.EventoDto;
+import com.capgeticket.evento.exception.EventoNotFoundException;
 import com.capgeticket.evento.model.Evento;
 import com.capgeticket.evento.repository.EventoRepository;
 import org.slf4j.Logger;
@@ -97,6 +98,7 @@ public class EventoServiceImpl implements EventoService{
 
     /**
      * Obtiene un evento determinado por su id
+     *
      * @param id la id del evento que se quiere buscar
      * @return un objeto EventoDto con los datos del evento
      */
@@ -107,16 +109,8 @@ public class EventoServiceImpl implements EventoService{
         EventoDto event = null;
         //Se puede hacer un metodo nuevo que sea findById que acepte long
         Optional<Evento> e = repository.findById(id);
-
-        if(e.isPresent()) {
-            event = EventoDto.of(e.get());
-        } else {
-            logger.info("No se encontro el evento con id = " + id);
-            //throw
-        }
-
         logger.info("Evento encontrado: {}", e.isPresent());
 
-        return event;
+        return EventoDto.of(e.orElseThrow(() -> new EventoNotFoundException(id)));
     }
 }

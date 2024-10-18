@@ -47,10 +47,7 @@ public class EventoController {
     @GetMapping("/{id}")
     public ResponseEntity<EventoDto> findById(@PathVariable("id") Long id) {
         logger.info("Recibida petición, iniciando findById");
-
-        EventoDto e = service.findById(id);
-
-        return ResponseEntity.ok(e);
+        return ResponseEntity.status(HttpStatus.OK).body(service.findById(id));
     }
 
     /**
