@@ -121,8 +121,15 @@ public class EventoController {
      */
     @PutMapping
     public ResponseEntity<EventoDto> edit(@RequestBody EventoDto eventoDto) {
+        logger.info("Iniciando la edición del evento");
         if (eventoDto == null || eventoDto.getNombre() == null || eventoDto.getNombre().isEmpty()) {
+            logger.warn("El evento no puede ser nulo o vacio");
             throw new IllegalArgumentException("El evento no puede ser nulo o tener un nombre vacío");
+        }
+
+        if (!service.existsById(eventoDto.getId())) {
+            logger.warn("El evento con ID {} no existe. Lanzando EventoNotFoundException", eventoDto.getId());
+            throw new EventoNotFoundException(eventoDto.getId());
         }
 
         EventoDto editedEvento = service.edit(eventoDto);

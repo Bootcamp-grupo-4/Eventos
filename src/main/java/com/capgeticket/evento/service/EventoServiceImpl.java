@@ -48,20 +48,7 @@ public class EventoServiceImpl implements EventoService{
         if (eventoDto == null) {
             throw new IllegalArgumentException("El evento no puede ser nulo");
         }
-        // Convertir de EventoDto a Evento
-        Evento evento = new Evento();
-        evento.setNombre(eventoDto.getNombre());
-        evento.setDescripcion(eventoDto.getDescripcion());
-        evento.setFechaEvento(eventoDto.getFechaEvento());
-        evento.setPrecioMinimo(eventoDto.getPrecioMinimo());
-        evento.setPrecioMaximo(eventoDto.getPrecioMaximo());
-        evento.setLocalidad(eventoDto.getLocalidad());
-        evento.setNombreDelRecinto(eventoDto.getNombreDelRecinto());
-        evento.setGenero(eventoDto.getGenero());
-        evento.setMostrar(eventoDto.getMostrar());
-
-        Evento savedEvento = repository.save(evento);
-
+        Evento savedEvento = repository.save(Evento.of(eventoDto, false));
         return EventoDto.of(savedEvento);
     }
     /**
@@ -134,9 +121,21 @@ public class EventoServiceImpl implements EventoService{
         return EventoDto.of(eventos);
     }
 
+    /**
+     * Edición del evento
+     * @param eventoDto el evento a editar
+     * @return una copia del evento editado
+     */
     @Override
     public EventoDto edit(EventoDto eventoDto) {
-        return null;
+        //Primero miramos a ver si el evento existe en nuestro sistema
+        if(!repository.existsById(eventoDto.getId())) {
+            logger.warn("El evento con ID {} no existe", eventoDto.getId());
+            throw new EventoNotFoundException("Este evento no existe en el sistema, por favor revise los datos");
+        }
+        Evento editedEvento = repository.save(Evento.of(eventoDto, true));
+        logger.info("Evento editado: {}", editedEvento);
+        return EventoDto.of(editedEvento);
     }
 
 }

@@ -1,5 +1,6 @@
 package com.capgeticket.evento.model;
 
+import com.capgeticket.evento.dto.EventoDto;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.math.BigDecimal;
@@ -40,4 +41,23 @@ public class Evento {
 
     @Column(name = "mostrar", nullable = false)
     private Boolean mostrar;
+
+
+    public static Evento of(EventoDto eventoDto, boolean editing) {
+        Evento evento = new Evento();
+        if (editing) {
+            //Como icaro, quise volar muy cerca del sol y me queme
+            evento.setId(eventoDto.getId());
+        }
+        evento.setNombre(eventoDto.getNombre());
+        evento.setDescripcion(eventoDto.getDescripcion());
+        evento.setFechaEvento(eventoDto.getFechaEvento());
+        evento.setPrecioMinimo(eventoDto.getPrecioMinimo());
+        evento.setPrecioMaximo(eventoDto.getPrecioMaximo());
+        evento.setLocalidad(eventoDto.getLocalidad());
+        evento.setNombreDelRecinto(eventoDto.getNombreDelRecinto());
+        evento.setGenero(eventoDto.getGenero());
+        evento.setMostrar(eventoDto.getMostrar());
+        return evento;
+    }
 }
