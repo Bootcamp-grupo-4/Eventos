@@ -3,6 +3,11 @@ package com.capgeticket.evento.controller;
 import com.capgeticket.evento.dto.EventoDto;
 import com.capgeticket.evento.exception.EventoNotFoundException;
 import com.capgeticket.evento.service.EventoService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +37,10 @@ public class EventoController {
      *
      * @return ResponseEntity con la colección de todos los eventos en formato EventoDto.
      */
+    @Operation(summary = "Buscar todos los eventos")
+    @ApiResponse(responseCode = "200",
+            description = "Lista de eventos",
+            content = @Content(mediaType = "application/json"))
     @GetMapping
     public ResponseEntity<Collection<EventoDto>> findAll() {
         logger.info("Iniciando búsqueda de todos los eventos");
@@ -43,6 +52,11 @@ public class EventoController {
         return ResponseEntity.ok(eventos);
     }
 
+    @Operation(summary = "Buscar Evento por Id")
+    @ApiResponse(responseCode = "200",
+            description = "Evento",
+            content = { @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = EventoDto.class)) })
     @GetMapping("/{id}")
     public ResponseEntity<EventoDto> findById(@PathVariable("id") Long id) {
         logger.info("Recibida petición, iniciando findById");
@@ -56,6 +70,11 @@ public class EventoController {
      * @return El ResponseEntity con el evento guardado y el estado HTTP 201.
      * @throws IllegalArgumentException Si el eventoDto es nulo o inválido.
      */
+    @Operation(summary = "Añadir Evento")
+    @ApiResponse(responseCode = "201",
+            description = "Evento",
+            content = { @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = EventoDto.class)) })
     @PostMapping
     public ResponseEntity<EventoDto> add(@RequestBody EventoDto eventoDto) {
         if (eventoDto == null || eventoDto.getNombre() == null || eventoDto.getNombre().isEmpty()) {
@@ -71,6 +90,11 @@ public class EventoController {
      * @param id El ID del evento a eliminar.
      * @return ResponseEntity con un valor booleano indicando si la eliminación fue exitosa o no.
      */
+    @Operation(summary = "Borrar Evento")
+    @ApiResponse(responseCode = "200",
+            description = "Evento",
+            content = { @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = Boolean.class)) })
     @DeleteMapping("/{id}")
     public ResponseEntity<Boolean> deleteById(@PathVariable Long id) {
         logger.info("Petición para eliminar el evento con ID: {}", id);
@@ -103,6 +127,11 @@ public class EventoController {
      * @throws IllegalArgumentException si el nombre del evento es nulo o vacío
      * @throws EventoNotFoundException en service si no se encuentran eventos que coincidan con el nombre proporcionado
      */
+    @Operation(summary = "Buscar Evento por nombre")
+    @ApiResponse(responseCode = "200",
+            description = "Evento",
+            content = { @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = EventoDto.class)) })
     @GetMapping("/nombre")
     public ResponseEntity<Collection<EventoDto>> findByName(@RequestParam String name) {
         // Validar nombre
@@ -119,6 +148,11 @@ public class EventoController {
      * @param eventoDto los datos del evento que se va a modificar
      * @return los datos del evento que se acaba de editar
      */
+    @Operation(summary = "Editar Evento")
+    @ApiResponse(responseCode = "200",
+            description = "Evento",
+            content = { @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = EventoDto.class)) })
     @PutMapping
     public ResponseEntity<EventoDto> edit(@RequestBody EventoDto eventoDto) {
         logger.info("Iniciando la edición del evento");
@@ -145,6 +179,11 @@ public class EventoController {
      * @throws IllegalArgumentException Si la ciudad es nula o vacía.
      * @throws EventoNotFoundException Si no se encuentran eventos en la ciudad.
      */
+    @Operation(summary = "Buscar Evento por ciudad")
+    @ApiResponse(responseCode = "200",
+            description = "Evento",
+            content = { @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = EventoDto.class)) })
     @GetMapping("/city")
     public ResponseEntity<Collection<EventoDto>> findByCity(@RequestParam(value = "city") String city) {
         logger.info("Petición para obtener eventos en la ciudad: {}", city);
@@ -175,6 +214,11 @@ public class EventoController {
      * @return una respuesta {@link ResponseEntity} con una colección de {@link EventoDto} encontrados.
      * @throws IllegalArgumentException si el género es nulo o vacío.
      */
+    @Operation(summary = "Buscar Evento por genero")
+    @ApiResponse(responseCode = "200",
+            description = "Evento",
+            content = { @Content(mediaType = "application/json",
+                    schema = @Schema(implementation = EventoDto.class)) })
     @GetMapping("/genero")
     public ResponseEntity<Collection<EventoDto>> findByGenre(@RequestParam String genre) {
         logger.info("Buscando eventos por género: {}", genre);

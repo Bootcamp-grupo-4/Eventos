@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
@@ -23,6 +24,7 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
     private static final Logger logger = LoggerFactory.getLogger(CustomGlobalExceptionHandler.class);
 
     // Manejo de la excepción EventoNotFoundException
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(EventoNotFoundException.class)
     public ResponseEntity<Object> handleEventoNotFound(EventoNotFoundException ex, WebRequest request) {
         logger.info("Manejando EventoNotFoundException: {}", ex.getMessage());
@@ -38,6 +40,7 @@ public class CustomGlobalExceptionHandler extends ResponseEntityExceptionHandler
     }
 
     // Manejo de la excepción IllegalArgumentException
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<Object> handleIllegalArgument(IllegalArgumentException ex, WebRequest request) {
         logger.info("Manejando IllegalArgumentException: {}", ex.getMessage());
