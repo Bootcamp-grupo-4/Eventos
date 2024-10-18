@@ -6,5 +6,8 @@ import java.util.List;
 
 
 public interface EventoService {
+
     List<EventoDto> findAll();
+
+    EventoDto findById(Long id);
 }
