@@ -129,9 +129,9 @@ public class EventoServiceImpl implements EventoService{
     @Override
     public EventoDto edit(EventoDto eventoDto) {
         //Primero miramos a ver si el evento existe en nuestro sistema
-        if(!repository.existsById(eventoDto.getId())) {
+        if(eventoDto.getId() == null || !repository.existsById(eventoDto.getId())) {
             logger.warn("El evento con ID {} no existe", eventoDto.getId());
-            throw new EventoNotFoundException("Este evento no existe en el sistema, por favor revise los datos");
+            throw new EventoNotFoundException();
         }
         Evento editedEvento = repository.save(Evento.of(eventoDto, true));
         logger.info("Evento editado: {}", editedEvento);
