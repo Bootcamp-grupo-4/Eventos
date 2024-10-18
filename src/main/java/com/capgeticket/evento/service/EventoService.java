@@ -14,4 +14,5 @@ public interface EventoService {
     EventoDto add(EventoDto evento);
     boolean existsById(Long id);
     boolean deleteById(Long id);
+    List<EventoDto> findByName(String name);
 }
