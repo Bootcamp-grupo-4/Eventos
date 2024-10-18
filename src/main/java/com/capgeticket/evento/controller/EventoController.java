@@ -1,6 +1,7 @@
 package com.capgeticket.evento.controller;
 
 import com.capgeticket.evento.dto.EventoDto;
+import com.capgeticket.evento.exception.EventoNotFoundException;
 import com.capgeticket.evento.service.EventoService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.websocket.server.PathParam;
@@ -69,14 +70,36 @@ public class EventoController {
     }
 
     /**
-     * Manejador de excepciones para IllegalArgumentException.
+     * Elimina un evento por su ID.
      *
-     * @param ex La excepción capturada.
-     * @return Un ResponseEntity con el mensaje de error y un estado HTTP 400.
+     * @param id El ID del evento a eliminar.
+     * @return ResponseEntity con un valor booleano indicando si la eliminación fue exitosa o no.
      */
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException ex) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Boolean> deleteById(@PathVariable Long id) {
+        logger.info("Petición para eliminar el evento con ID: {}", id);
+
+        // Verificar si el evento existe
+        if (!service.existsById(id)) {
+            logger.warn("El evento con ID {} no existe. Lanzando EventoNotFoundException", id);
+            throw new EventoNotFoundException(id);
+        }
+
+        // Si existe, proceder a eliminar
+        boolean isDeleted = service.deleteById(id);
+
+        if (isDeleted) {
+            logger.info("El evento con ID {} fue eliminado con éxito", id);
+        } else {
+            logger.warn("El evento con ID {} no pudo ser eliminado", id);
+        }
+
+        // Devolver respuesta con estado OK y el resultado de la eliminación
+        return new ResponseEntity<>(isDeleted, HttpStatus.OK);
     }
 }
+
+
+
+
 
