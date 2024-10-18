@@ -134,4 +134,9 @@ public class EventoServiceImpl implements EventoService{
         return EventoDto.of(eventos);
     }
 
+    @Override
+    public EventoDto edit(EventoDto eventoDto) {
+        return null;
+    }
+
 }

@@ -114,11 +114,19 @@ public class EventoController {
         return ResponseEntity.ok(eventos);
     }
 
+    /**
+     * Maneja la edición de los eventos
+     * @param eventoDto los datos del evento que se va a modificar
+     * @return los datos del evento que se acaba de editar
+     */
+    @PutMapping
     public ResponseEntity<EventoDto> edit(@RequestBody EventoDto eventoDto) {
         if (eventoDto == null || eventoDto.getNombre() == null || eventoDto.getNombre().isEmpty()) {
-
+            throw new IllegalArgumentException("El evento no puede ser nulo o tener un nombre vacío");
         }
 
+        EventoDto editedEvento = service.edit(eventoDto);
+        return ResponseEntity.status(HttpStatus.OK).body(editedEvento);
 
     }
 }
