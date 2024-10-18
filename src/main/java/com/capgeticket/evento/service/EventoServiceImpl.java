@@ -9,8 +9,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class EventoServiceImpl implements EventoService{
@@ -118,6 +120,53 @@ public class EventoServiceImpl implements EventoService{
             throw new EventoNotFoundException("No existen eventos con ese nombre");
         }
 
+        return EventoDto.of(eventos);
+    }
+
+    /**
+     * Obtiene una lista de eventos según la ciudad proporcionada.
+     *
+     * @param city La ciudad por la que se desea filtrar los eventos.
+     * @return Una lista de eventos en formato DTO.
+     * @throws EventoNotFoundException Si no se encuentran eventos en la ciudad.
+     */
+    @Override
+    public List<EventoDto> findByCity(String city) {
+        logger.info("Buscando eventos en la ciudad: {} en EventoServiceImpl", city);
+
+        List<Evento> eventos = repository.findByCity(city);
+
+        if (eventos.isEmpty()) {
+            logger.error("No se encontraron eventos en la ciudad: {}. Lanzando EventoNotFoundException.", city);
+            throw new EventoNotFoundException("No se encontraron eventos en la ciudad en EventoServiceImpl" + city);
+        }
+
+        return eventos.stream().map(EventoDto::of).collect(Collectors.toList());
+    }
+
+    /**
+     * Busca eventos en la base de datos por género.
+     *
+     * @param genre el género de los eventos a buscar. No debe ser nulo o vacío.
+     * @return una lista de {@link EventoDto} que representa los eventos encontrados.
+     * @throws IllegalArgumentException si el género es nulo o vacío.
+     * @throws EventoNotFoundException si no se encuentran eventos con el género especificado.
+     */
+    @Override
+    public List<EventoDto> findByGenre(String genre) {
+        logger.info("Buscando eventos con el género: {}", genre);
+
+        if (genre == null || genre.trim().isEmpty()) {
+            throw new IllegalArgumentException("El género no puede ser nulo o vacío");
+        }
+
+        List<Evento> eventos = repository.findByGenero(genre);
+
+        if (eventos.isEmpty()) {
+            throw new EventoNotFoundException("No existen eventos con el género: " + genre);
+        }
+
+        logger.info("Eventos encontrados: {}", eventos.size());
         return EventoDto.of(eventos);
     }
 

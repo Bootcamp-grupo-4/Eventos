@@ -2,6 +2,7 @@ package com.capgeticket.evento.service;
 
 import com.capgeticket.evento.dto.EventoDto;
 
+import java.util.Collection;
 import java.util.List;
 
 
@@ -17,4 +18,6 @@ public interface EventoService {
     List<EventoDto> findByName(String name);
 
     EventoDto edit(EventoDto eventoDto);
+    Collection<EventoDto> findByCity(String city);
+    List<EventoDto> findByGenre(String genre);
 }
