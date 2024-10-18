@@ -27,7 +27,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(EventoController.class)
-class AddTest01 {
+public class AddEvento01 {
 
     @Autowired
     private MockMvc mockMvc;
@@ -149,9 +149,15 @@ class AddTest01 {
                                 "    \"genero\": \"Música\",\n" +
                                 "    \"mostrar\": true\n" +
                                 "}"))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.timestamp").exists())
+                .andExpect(jsonPath("$.status").value(400)) // Verificamos el status 400
+                .andExpect(jsonPath("$.error").value("Solicitud incorrecta"))
+                .andExpect(jsonPath("$.message").value("El evento no puede ser nulo o tener un nombre vacío"))
+                .andExpect(jsonPath("$.path").value("uri=/evento/"));
 
-        verify(eventoService, never()).add(any(EventoDto.class));
+        verify(eventoService, never()).add(any(EventoDto.class)); // Asegura que el método del servicio no fue llamado
     }
 
 }
