@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
+import java.util.List;
 
 @RestController
 @RequestMapping("/evento")
@@ -52,6 +53,12 @@ public class EventoController {
         }
         EventoDto savedEvento = service.add(eventoDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedEvento);
+    }
+
+    @GetMapping("/nombre")
+    public ResponseEntity<Collection<EventoDto>> findByName(@RequestParam String name) {
+        List<EventoDto> eventos = service.findByName(name);
+        return ResponseEntity.ok(eventos);
     }
 
     /**

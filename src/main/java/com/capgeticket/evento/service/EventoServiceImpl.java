@@ -1,6 +1,7 @@
 package com.capgeticket.evento.service;
 
 import com.capgeticket.evento.dto.EventoDto;
+import com.capgeticket.evento.exception.EventoNotFoundException;
 import com.capgeticket.evento.model.Evento;
 import com.capgeticket.evento.repository.EventoRepository;
 import org.slf4j.Logger;
@@ -61,4 +62,20 @@ public class EventoServiceImpl implements EventoService{
 
         return EventoDto.of(savedEvento);
     }
+
+    @Override
+    public List<EventoDto> findByName(String name) {
+        if (name == null || name.trim().isEmpty()) {
+            throw new IllegalArgumentException("El nombre del evento no puede ser nulo o vacío");
+        }
+
+        List<Evento> eventos = repository.findByNombreContainingIgnoreCase(name);
+
+        if (eventos.isEmpty()) {
+            throw new EventoNotFoundException();
+        }
+
+        return EventoDto.of(eventos);
+    }
+
 }
