@@ -134,4 +134,30 @@ public class EventoServiceImpl implements EventoService{
         return EventoDto.of(eventos);
     }
 
+    /**
+     * Busca eventos en la base de datos por género.
+     *
+     * @param genre el género de los eventos a buscar. No debe ser nulo o vacío.
+     * @return una lista de {@link EventoDto} que representa los eventos encontrados.
+     * @throws IllegalArgumentException si el género es nulo o vacío.
+     * @throws EventoNotFoundException si no se encuentran eventos con el género especificado.
+     */
+    @Override
+    public List<EventoDto> findByGenre(String genre) {
+        logger.info("Buscando eventos con el género: {}", genre);
+
+        if (genre == null || genre.trim().isEmpty()) {
+            throw new IllegalArgumentException("El género no puede ser nulo o vacío");
+        }
+
+        List<Evento> eventos = repository.findByGenero(genre);
+
+        if (eventos.isEmpty()) {
+            throw new EventoNotFoundException("No existen eventos con el género: " + genre);
+        }
+
+        logger.info("Eventos encontrados: {}", eventos.size());
+        return EventoDto.of(eventos);
+    }
+
 }

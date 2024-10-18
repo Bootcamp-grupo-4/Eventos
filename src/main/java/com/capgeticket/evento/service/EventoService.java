@@ -15,4 +15,5 @@ public interface EventoService {
     boolean existsById(Long id);
     boolean deleteById(Long id);
     List<EventoDto> findByName(String name);
+    List<EventoDto> findByGenre(String genre);
 }
