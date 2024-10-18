@@ -13,6 +13,10 @@ public class EventoNotFoundException extends RuntimeException {
         action1();
     }
 
+    public EventoNotFoundException(String message) {
+        super(message);
+    }
+
     public EventoNotFoundException(Long id) {
         super("Epic Fail: No existe el evento con ID " + id);
     }
