@@ -29,7 +29,7 @@ public class EventoServiceImpl implements EventoService{
         List<Evento> eventos = repository.findAll();
         List<EventoDto> eventoDtos = EventoDto.of(eventos);
 
-        logger.info("Eventos encontrados: {}", eventoDtos.size());
+        logger.info("Eventos encontrados: {} en EventoServiceImpl", eventoDtos.size());
 
         return eventoDtos;
     }
@@ -60,5 +60,36 @@ public class EventoServiceImpl implements EventoService{
         Evento savedEvento = repository.save(evento);
 
         return EventoDto.of(savedEvento);
+    }
+    /**
+     * Verifica si un evento con el ID dado existe.
+     *
+     * @param id El ID del evento a verificar.
+     * @return true si el evento existe, false si no.
+     */
+    @Override
+    public boolean existsById(Long id) {
+        return repository.existsById(id);
+    }
+
+    /**
+     * Verifica si un evento con el ID dado existe y lo elimina si es encontrado.
+     *
+     * @param id El ID del evento a eliminar.
+     * @return true si el evento fue eliminado correctamente, false si no fue encontrado.
+     */
+    @Override
+    public boolean deleteById(Long id) {
+        logger.info("Intentando eliminar el evento con ID: {} en EventoServiceImpl", id);
+
+        if (existsById(id)) {
+            repository.deleteById(id);
+            logger.info("Evento con ID {} eliminado exitosamente en EventoServiceImpl", id);
+            return true;
+        } else {
+            logger.warn("El evento con ID {} no existe en EventoServiceImpl", id);
+            return false;
+        }
+
     }
 }
