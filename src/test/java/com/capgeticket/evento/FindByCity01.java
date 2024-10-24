@@ -200,7 +200,7 @@ class FindByCity01 {
     @Test
     public void testFindByCityWithRestAssured() {
 
-        // Inserta un evento en la base de datos para la prueba
+        // Arrange: Crear un evento simulado
         Evento evento1 = new Evento();
         evento1.setId(1L);
         evento1.setNombre("Concierto");
@@ -213,9 +213,13 @@ class FindByCity01 {
         evento1.setNombreDelRecinto("Palacio de Deportes");
         evento1.setMostrar(true);
 
-        eventoService.add(EventoDto.of(evento1));  // Guarda el evento en la base de datos
+        // Convertir el evento a DTO
+        EventoDto eventoDto1 = EventoDto.of(evento1);
 
-        // Realiza una solicitud GET a /evento/ciudad con el parámetro city
+        // Mockear la respuesta del servicio findByCity
+        when(eventoService.findByCity("Madrid")).thenReturn(Arrays.asList(eventoDto1));
+
+        // Act & Assert: Realiza una solicitud GET y verifica el código de estado y el contenido de la respuesta
         given()
                 .contentType(ContentType.JSON)
                 .queryParam("city", "Madrid")

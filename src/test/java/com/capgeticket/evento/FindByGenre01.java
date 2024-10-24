@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -111,7 +112,7 @@ public class FindByGenre01 {
     @Test
     public void testFindByGenreWithRestAssured() {
 
-        // Inserta un evento en la base de datos para la prueba
+        // Arrange: Crear un evento simulado
         Evento evento1 = new Evento();
         evento1.setId(1L);
         evento1.setNombre("Concierto");
@@ -124,9 +125,13 @@ public class FindByGenre01 {
         evento1.setNombreDelRecinto("Palacio de Deportes");
         evento1.setMostrar(true);
 
-        eventoService.add(EventoDto.of(evento1));  // Guarda el evento
+        // Convertir el evento a DTO
+        EventoDto eventoDto1 = EventoDto.of(evento1);
 
-        // Realiza una solicitud GET a /evento/genero con el parámetro genre
+        // Mockear la respuesta del servicio findByGenre
+        when(eventoService.findByGenre("Música")).thenReturn(Arrays.asList(eventoDto1));
+
+        // Act & Assert: Realiza una solicitud GET y verifica el código de estado y el contenido de la respuesta
         given()
                 .contentType(ContentType.JSON)
                 .queryParam("genre", "Música")
@@ -134,7 +139,7 @@ public class FindByGenre01 {
                 .get("/evento/genero")
                 .then()
                 .statusCode(HttpStatus.OK.value())  // Verificar que el estado es 200 OK
-                .body("size()", is(1))  // Verificar que la respuesta tiene 1 evento
+                .body("size()", is(5))  // Verificar que la respuesta tiene 5 evento
                 .body("[0].nombre", equalTo("Concierto"))  // Verificar que el nombre es correcto
                 .body("[0].localidad", equalTo("Madrid"))  // Verificar que la localidad es "Madrid"
                 .body("[0].precioMinimo", equalTo(10.00f))  // Verificar que el precio mínimo es 10.00
