@@ -7,23 +7,32 @@ import com.capgeticket.evento.model.Evento;
 import com.capgeticket.evento.repository.EventoRepository;
 import com.capgeticket.evento.service.EventoService;
 import com.capgeticket.evento.service.EventoServiceImpl;
+import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.ActiveProfiles;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import static io.restassured.RestAssured.given;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
-
+@SpringBootTest
+@ActiveProfiles("test")
 class FindByCity01 {
 
     @Mock
@@ -187,6 +196,38 @@ class FindByCity01 {
 
         // Verificar el mensaje de la excepción
         assertEquals("No se encontraron eventos en la ciudad en EventoServiceImplMadrid", thrown.getMessage());
+    }
+    @Test
+    public void testFindByCityWithRestAssured() {
+
+        // Inserta un evento en la base de datos para la prueba
+        Evento evento1 = new Evento();
+        evento1.setId(1L);
+        evento1.setNombre("Concierto");
+        evento1.setGenero("Música");
+        evento1.setDescripcion("Descripción del concierto");
+        evento1.setFechaEvento(LocalDate.now());
+        evento1.setPrecioMinimo(new BigDecimal("10.00"));
+        evento1.setPrecioMaximo(new BigDecimal("50.00"));
+        evento1.setLocalidad("Madrid");
+        evento1.setNombreDelRecinto("Palacio de Deportes");
+        evento1.setMostrar(true);
+
+        eventoService.add(EventoDto.of(evento1));  // Guarda el evento en la base de datos
+
+        // Realiza una solicitud GET a /evento/ciudad con el parámetro city
+        given()
+                .contentType(ContentType.JSON)
+                .queryParam("city", "Madrid")
+                .when()
+                .get("/evento/ciudad")
+                .then()
+                .statusCode(HttpStatus.OK.value())  // Verificar que el estado es 200 OK
+                .body("size()", is(1))  // Verificar que la respuesta contiene 1 evento
+                .body("[0].nombre", equalTo("Concierto"))  // Verificar que el nombre es correcto
+                .body("[0].localidad", equalTo("Madrid"))  // Verificar que la localidad es "Madrid"
+                .body("[0].precioMinimo", equalTo(10.00f))  // Verificar que el precio mínimo es 10.00
+                .body("[0].precioMaximo", equalTo(50.00f));  // Verificar que el precio máximo es 50.00
     }
 
 }
