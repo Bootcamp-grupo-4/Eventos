@@ -42,6 +42,10 @@ public class Evento {
     @Column(name = "mostrar", nullable = false)
     private Boolean mostrar;
 
+    @Column(name = "precio", nullable = false, precision = 10, scale = 2)
+    private BigDecimal precio;
+
+
 
     public static Evento of(EventoDto eventoDto, boolean editing) {
         Evento evento = new Evento();
@@ -58,6 +62,7 @@ public class Evento {
         evento.setNombreDelRecinto(eventoDto.getNombreDelRecinto());
         evento.setGenero(eventoDto.getGenero());
         evento.setMostrar(eventoDto.getMostrar());
+        evento.setPrecio(eventoDto.getPrecio());
         return evento;
     }
 }
