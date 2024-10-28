@@ -53,11 +53,13 @@ public class FindAllEventos01 {
         // Simular datos en la base de datos
         Evento evento1 = new Evento();
         evento1.setNombre("Evento 1");
+        evento1.setMostrar(true);
 
         Evento evento2 = new Evento();
         evento2.setNombre("Evento 2");
+        evento2.setMostrar(true);
 
-        when(eventoRepository.findAll()).thenReturn(Arrays.asList(evento1, evento2));
+        when(eventoRepository.findAllMostrar()).thenReturn(Arrays.asList(evento1, evento2));
 
         // Llamada al servicio
         List<EventoDto> resultado = eventoService.findAll();

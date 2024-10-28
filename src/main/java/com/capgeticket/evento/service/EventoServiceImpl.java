@@ -31,7 +31,7 @@ public class EventoServiceImpl implements EventoService{
     public List<EventoDto> findAll() {
         logger.info("Iniciando la búsqueda de todos los eventos en EventoServiceImpl");
 
-        List<Evento> eventos = repository.findAll();
+        List<Evento> eventos = repository.findAllMostrar();
         List<EventoDto> eventoDtos = EventoDto.of(eventos);
 
         logger.info("Eventos encontrados: {} en EventoServiceImpl", eventoDtos.size());

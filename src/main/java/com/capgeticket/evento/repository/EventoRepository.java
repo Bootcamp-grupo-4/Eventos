@@ -2,6 +2,7 @@ package com.capgeticket.evento.repository;
 
 import com.capgeticket.evento.model.Evento;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -32,4 +33,11 @@ public interface EventoRepository extends JpaRepository<Evento,Long> {
      * @return Lista de eventos que coinciden con el criterio de búsqueda.
      */
     List<Evento> findByGenero(String genero);
+
+    @Query("SELECT e FROM Evento e WHERE e.mostrar")
+    List<Evento> findAllMostrar();
+
+    @Query("UPDATE Evento e SET e.mostrar = false WHERE e.id = ?1")
+    @Modifying
+    void deleteById(Long id);
 }
