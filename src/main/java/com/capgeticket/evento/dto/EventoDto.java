@@ -21,6 +21,7 @@ public class EventoDto {
     private String nombreDelRecinto;
     private String genero;
     private Boolean mostrar;
+    private BigDecimal precio;
 
     public static EventoDto of(Evento evento) {
         EventoDto eventoDto = new EventoDto();
@@ -34,6 +35,7 @@ public class EventoDto {
         eventoDto.setNombreDelRecinto(evento.getNombreDelRecinto());
         eventoDto.setGenero(evento.getGenero());
         eventoDto.setMostrar(evento.getMostrar());
+        eventoDto.setPrecio(evento.getPrecio());
         return eventoDto;
     }
 
